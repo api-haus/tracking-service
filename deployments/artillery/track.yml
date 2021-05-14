@@ -1,0 +1,25 @@
+config:
+  target: "http://tracker-api:8080"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: Warm up
+    - duration: 120
+      arrivalRate: 5
+      rampTo: 100
+      name: Ramp up load
+    - duration: 600
+      arrivalRate: 100
+      name: Sustained load
+  payload:
+    path: "trackers.csv"
+    fields:
+      - "tracker_id"
+
+scenarios:
+  - name: "Track events"
+    flow:
+      - post:
+          url: "/track"
+          qs:
+            id: "{{ tracker_id }}"

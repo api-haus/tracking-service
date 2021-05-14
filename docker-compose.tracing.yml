@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  grafana:
+    image: grafana/grafana:7.1.4
+    environment:
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/provisioning/dashboards/node-js-dashboard_rev4.json
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./deployments/grafana/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ./deployments/grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
+      - ./deployments/grafana/node-js-dashboard_rev4.json:/etc/grafana/provisioning/dashboards/node-js-dashboard_rev4.json
+    networks:
+      - monitoring
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - '6832:6832/udp'
+      - '14268:14268'
+      - '16686:16686'
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus:v2.19.1
+    volumes:
+      - ./deployments/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - '9090:9090'
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge

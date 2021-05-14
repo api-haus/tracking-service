@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "shippedProposals": true
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-syntax-top-level-await"
+  ]
+}

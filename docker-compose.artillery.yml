@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  artillery:
+    build: .
+    entrypoint: ["npm", "run", "profile"]
+    volumes:
+      - .:/usr/share/app
+      - /usr/share/app/node_modules
+    depends_on:
+      tracker:
+        condition: service_healthy
+    networks:
+      - app-tier
+
+networks:
+  app-tier:

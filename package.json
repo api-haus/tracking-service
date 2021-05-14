@@ -1,0 +1,57 @@
+{
+  "name": "tracker",
+  "version": "0.0.0",
+  "description": "Event Tracker and Stats services.",
+  "main": "src/index.mjs",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "test": "ava --verbose",
+    "start": "node src/index.mjs",
+    "profile": "MULTICORE=true ARTILLERY_WORKERS=4 artillery run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yurihq/tracker.git"
+  },
+  "author": "Yuri Chirkov <mail@api.haus>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/yurihq/tracker/issues"
+  },
+  "homepage": "https://github.com/yurihq/tracker#readme",
+  "dependencies": {
+    "@sentry/node": "^6.3.6",
+    "clickhouse": "^1.2.88888888",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "fast-json-stringify": "^2.7.3",
+    "fastify": "^3.15.1",
+    "fastify-cookie": "^5.3.1",
+    "fastify-metrics": "^7.1.0",
+    "fastify-plugin": "^3.0.0",
+    "jaeger-client": "^3.18.1",
+    "kafkajs": "^1.15.0",
+    "lru-cache": "^6.0.0",
+    "ms": "^2.1.3",
+    "opentracing": "^0.14.5",
+    "pg": "^8.6.0",
+    "pino": "^6.11.3",
+    "prom-client": "^13.1.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.2",
+    "@babel/eslint-parser": "^7.14.2",
+    "@babel/plugin-syntax-top-level-await": "^7.12.13",
+    "@babel/preset-env": "^7.14.2",
+    "artillery": "1.6",
+    "ava": "^3.15.0",
+    "eslint": "^7.26.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-node": "^11.1.0",
+    "got": "^11.8.2",
+    "nodemon": "^2.0.7"
+  }
+}

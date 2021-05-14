@@ -1,0 +1,124 @@
+version: "3"
+
+services:
+  tracker:
+    build: .
+    command: npx nodemon
+    hostname: tracker-api
+    volumes:
+      - .:/usr/share/app
+      - /usr/share/app/node_modules
+    env_file:
+      - .env.composition
+    healthcheck:
+      test:
+        [ "CMD", "wget", "--spider", "-q", "localhost:8080" ]
+      interval: 10s
+      timeout: 5s
+      retries: 7
+    labels:
+      autoheal: ""
+    depends_on:
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+    networks:
+      - app-tier
+      - monitoring
+
+  db-init:
+    image: alpine
+    command: >
+      ash -c "(cd /db/clickhouse; init.sh) && (cd /db/postgres; init.sh)"
+    env_file:
+      - .env.composition
+    volumes:
+      - ./deployments/clickhouse:/db/clickhouse
+      - ./deployments/postgres:/db/postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+    networks:
+      - app-tier
+
+  postgres:
+    image: postgres
+    hostname: postgres
+    environment:
+      PGDATA: /data/postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-tier
+
+  clickhouse:
+    image: yandex/clickhouse-server:21.3-alpine
+    hostname: clickhouse
+    healthcheck:
+      test:
+        [ "CMD", "wget", "--spider", "-q", "localhost:8123/ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 7
+    networks:
+      - app-tier
+
+  zookeeper:
+    image: 'bitnami/zookeeper:3.6.2'
+    hostname: zookeeper
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+      ZOO_4LW_COMMANDS_WHITELIST: "ruok"
+    healthcheck:
+      test: [ "CMD-SHELL", "echo ruok | nc 127.0.0.1 2181" ]
+      start_period: 20s
+      interval: 20s
+      timeout: 20s
+      retries: 5
+    labels:
+      autoheal: ""
+    restart: on-failure
+    networks:
+      - app-tier
+
+  kafka:
+    image: 'bitnami/kafka:2.7.0'
+    hostname: kafka
+    environment:
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+    healthcheck:
+      test:
+        [ "CMD", "kafka-topics.sh", "--list", "--zookeeper", "zookeeper:2181" ]
+      start_period: 20s
+      interval: 10s
+      timeout: 20s
+      retries: 5
+    labels:
+      autoheal: ""
+    restart: on-failure
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    networks:
+      - app-tier
+
+  autoheal:
+    image: willfarrell/autoheal
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  app-tier:
+  monitoring:
+    driver: bridge
