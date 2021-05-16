@@ -1,7 +1,6 @@
 import fastJson from 'fast-json-stringify';
 
 import kafka from '../databases/kafka.mjs';
-import logger from '../integrations/logger.mjs';
 import clickhouse from '../databases/clickhouse.mjs';
 import { eventSchema } from '../schemas/event.mjs';
 
@@ -14,7 +13,7 @@ const producer = kafka.producer();
 await producer.connect();
 
 /**
- * Postpone sending event via Kafka Producer Stream
+ * Postpone event tracking
  *
  * @param {object} eventParams
  * @return {Promise<void>}
@@ -26,8 +25,6 @@ export async function postEvent(eventParams) {
     date_time: formatISODateTime(eventParams.date_time.toISOString())
   });
 
-  logger.debug('send event %O', eventParams);
-
   await producer.send({
     topic: EVENTS_TOPIC,
     messages: [{ value: stringifyEvent(eventParams) }]
@@ -35,7 +32,7 @@ export async function postEvent(eventParams) {
 }
 
 /**
- * Count events by trackerId in date range
+ * Count events by tracker id in between date range
  *
  * @param {string} trackerId
  * @param {Date} fromDate

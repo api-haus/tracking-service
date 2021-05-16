@@ -22,6 +22,16 @@ test.serial('Must track events', async (t) => {
   t.truthy(response.headers['set-cookie']);
 });
 
+test.serial('Must respond with 404 with unknown tracker', async (t) => {
+  const response = await got.post('http://localhost:8080/track', {
+    searchParams: {
+      id: '381e7780-a406-43b1-b5cc-083ee552b1a0 \n'
+    }
+  });
+
+  t.is(response.statusCode, 404);
+});
+
 test.serial('Must provide event stats', async (t) => {
   const response = await got.get('http://localhost:8080/stats', {
     searchParams: {

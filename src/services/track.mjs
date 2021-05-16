@@ -28,7 +28,7 @@ export const trackService = (app) => app.post('/track', {
   span.setTag('event.id', eventId);
   span.setTag('tracker.id', trackerId);
 
-  // Post event to Kafka via TCP
+  // Post event to Kafka over TCP socket
   await postEvent({
     ip: request.ip,
     url: new URL(request.url, `${request.protocol}://${request.headers.host}`),
