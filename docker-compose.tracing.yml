@@ -8,6 +8,7 @@ services:
     ports:
       - '3000:3000'
     volumes:
+      - ./deployments/grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./deployments/grafana/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
       - ./deployments/grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
       - ./deployments/grafana/node-js-dashboard_rev4.json:/etc/grafana/provisioning/dashboards/node-js-dashboard_rev4.json

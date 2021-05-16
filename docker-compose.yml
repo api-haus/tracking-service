@@ -32,7 +32,7 @@ services:
   db-init:
     image: alpine
     command: >
-      ash -c "(cd /db/clickhouse; init.sh) && (cd /db/postgres; init.sh)"
+      ash -c "(cd /db/clickhouse; ./init.sh) && (cd /db/postgres; ./init.sh)"
     env_file:
       - .env.composition
     volumes:
