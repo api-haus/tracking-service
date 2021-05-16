@@ -8,7 +8,7 @@ config:
       arrivalRate: 5
       rampTo: 250
       name: Ramp up load
-    - duration: 300
+    - duration: 600
       arrivalRate: 250
       name: Sustained load
   payload:

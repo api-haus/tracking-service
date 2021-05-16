@@ -7,7 +7,7 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "test": "ava --verbose",
+    "test": "JAEGER_DISABLED=true ava --verbose",
     "start": "node src/index.mjs",
     "profile": "MULTICORE=true ARTILLERY_WORKERS=4 artillery run"
   },

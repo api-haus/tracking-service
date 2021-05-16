@@ -22,17 +22,17 @@ db-shell:
 		run --entrypoint ash \
 		db-init
 
-dev: build down db-init
+dev: build down kafka db-init
 	docker compose \
 		run tracker \
 		npx nodemon
 
-tdd: build down db-init
+tdd: build down kafka db-init
 	docker compose \
 		run tracker \
 		npm test -- -w
 
-test: build down db-init
+test: build down kafka db-init
 	docker compose \
 		run tracker \
 		npm test -- --fail-fast

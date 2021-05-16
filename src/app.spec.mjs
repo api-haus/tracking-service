@@ -7,10 +7,6 @@ test.serial.before(async (t) => {
   await app.listen(8080);
 });
 
-test.beforeEach(async (t) => {
-  await new Promise((r) => setTimeout(r, 1000));
-});
-
 test.serial('Must track events', async (t) => {
   const response = await got.post('http://localhost:8080/track', {
     searchParams: {
@@ -25,14 +21,17 @@ test.serial('Must track events', async (t) => {
 test.serial('Must respond with 404 with unknown tracker', async (t) => {
   const response = await got.post('http://localhost:8080/track', {
     searchParams: {
-      id: '381e7780-a406-43b1-b5cc-083ee552b1a0 \n'
-    }
+      id: '381e7780-a406-43b1-b5cc-083ee552b1a0'
+    },
+    throwHttpErrors: false
   });
 
   t.is(response.statusCode, 404);
 });
 
 test.serial('Must provide event stats', async (t) => {
+  t.timeout(15000);
+  await new Promise((r) => setTimeout(r, 10000));
   const response = await got.get('http://localhost:8080/stats', {
     searchParams: {
       id: 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
