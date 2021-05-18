@@ -5,7 +5,7 @@ import jaeger from 'jaeger-client';
 import logger from './logger';
 
 const {
-  JAEGER_SERVICE_NAME: serviceName
+  JAEGER_SERVICE_NAME: serviceName = 'service'
 } = process.env;
 
 const metrics = new jaeger.PrometheusMetricsFactory(promClient, serviceName);
