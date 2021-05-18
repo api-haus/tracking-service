@@ -5,6 +5,7 @@ import AsyncLock from 'async-lock';
 import { inject, injectable } from "inversify";
 
 import { DB } from "@/types";
+import { Producer } from "kafkajs";
 
 export declare type Tracker = {
   value: string
@@ -34,7 +35,8 @@ export class TrackerStore {
         if (tracker)
           return;
 
-        const { rows } = await (await this.postgres).query({
+        const client = await this.postgres;
+        const { rows } = await client.query({
           text: 'SELECT value FROM trackers WHERE uuid = $1',
           values: [id]
         });

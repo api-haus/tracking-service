@@ -1,15 +1,22 @@
 config:
   target: "http://tracker-api:8080"
   phases:
-    - duration: 10
+    - duration: 30
       arrivalRate: 5
       name: Warm up
-    - duration: 120
+    - duration: 300
       arrivalRate: 5
       rampTo: 250
       name: Ramp up load
     - duration: 600
       arrivalRate: 250
+      name: Sustained load
+    - duration: 300
+      arrivalRate: 5
+      rampTo: 500
+      name: Ramp up load
+    - duration: 600
+      arrivalRate: 500
       name: Sustained load
   payload:
     path: "trackers.csv"

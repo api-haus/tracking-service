@@ -1,5 +1,5 @@
-import { Producer } from "kafkajs";
 import fastJson from "fast-json-stringify";
+import { Producer } from "kafkajs";
 import { inject, injectable } from "inversify";
 
 import { DB } from "@/types";
@@ -24,10 +24,12 @@ interface EventData {
 @injectable()
 export class EventStore {
   @inject(DB.KafkaProducer)
-  private producer: Producer;
+  private producer: Promise<Producer>;
 
   async postEvent(eventData: EventData): Promise<void> {
-    await (await this.producer).send({
+    const producer = await this.producer;
+    await producer.send({
+      acks: 0,
       topic: EVENTS_TOPIC,
       messages: [{ value: stringifyEvent(eventData) }]
     });

@@ -7,7 +7,7 @@ const { CLICKHOUSE } = process.env;
 
 export const clickhouseContainer = new ContainerModule((bind: interfaces.Bind) => {
   // Provide simple clickhouse HTTP client for getting event statistics
-  bind(DB.ClickHouse).toDynamicValue(async () => {
+  bind(DB.ClickHouse).toDynamicValue(() => {
     return new ClickHouse({
       format: 'json',
       url: CLICKHOUSE,

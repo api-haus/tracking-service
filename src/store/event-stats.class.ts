@@ -17,12 +17,12 @@ export interface EventStats {
 @injectable()
 export class EventStatsProvider {
   @inject(DB.ClickHouse)
-  private clickhouse: Promise<ClickHouse>;
+  private clickhouse: ClickHouse;
 
   async eventStats(query: EventStatsQuery): Promise<EventStats> {
     const queryString = EventStatsProvider.statsQuery(query);
 
-    const [{ count }] = await (await this.clickhouse).query(queryString).toPromise();
+    const [{ count }] = await this.clickhouse.query(queryString).toPromise();
 
     return { count };
   }
