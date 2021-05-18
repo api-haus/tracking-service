@@ -12,18 +12,8 @@ const container = new Container();
 container.bind<App>(TYPES.App).to(App);
 container.bind<Router>(TYPES.Router).to(Router);
 
-const {
-  routeContainer,
-  serviceContainer,
-  storesContainer,
-  ...dependencyContainers
-} = containers;
-
 container.load(
-  ...Object.values(dependencyContainers),
-  serviceContainer,
-  storesContainer,
-  routeContainer
+  ...Object.values(containers)
 );
 
 export { container };

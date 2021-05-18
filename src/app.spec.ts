@@ -31,6 +31,8 @@ test.serial('Must respond with 404 with unknown tracker', async (t) => {
 });
 
 test.serial('Must provide event stats', async (t) => {
+  t.timeout(10000);
+  await new Promise(resolve => setTimeout(resolve, 5000));
   const response = await got.get<EventStats>('http://localhost:8080/stats', {
     searchParams: {
       id: 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
