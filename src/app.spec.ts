@@ -1,7 +1,8 @@
 import test from 'ava';
 import got from 'got';
 
-import app from './app.mjs';
+import app from './app';
+import { EventStats } from "@/store";
 
 test.serial.before(async (t) => {
   await app.listen(8080);
@@ -30,9 +31,7 @@ test.serial('Must respond with 404 with unknown tracker', async (t) => {
 });
 
 test.serial('Must provide event stats', async (t) => {
-  t.timeout(15000);
-  await new Promise((r) => setTimeout(r, 10000));
-  const response = await got.get('http://localhost:8080/stats', {
+  const response = await got.get<EventStats>('http://localhost:8080/stats', {
     searchParams: {
       id: 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
       from: new Date(Date.now() - 100000).toISOString(),

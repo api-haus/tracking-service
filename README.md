@@ -4,8 +4,6 @@ This is an implementation of a test task.
 
 Application provides endpoints for collecting Events in `/track` as well as displaying statistics in `/stats`.
 
-[Fastify](https://fastify.io) was selected for performance & simplicity.
-
 ## Running
 
 * `make profile` to provision Grafana at [http://localhost:3000](http://localhost:3000) and run a stress-test

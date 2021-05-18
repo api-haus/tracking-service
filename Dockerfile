@@ -1,6 +1,8 @@
 FROM node:14-alpine
 
-WORKDIR /usr/share/app
+RUN apk add git
+
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 

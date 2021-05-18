@@ -1,4 +1,6 @@
-export const eventSchema = {
+import { Schema } from "fast-json-stringify";
+
+export const eventSchema: Schema = {
   type: 'object',
   properties: {
     date: { type: 'string', format: 'date' },
